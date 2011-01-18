@@ -45,7 +45,6 @@ def do_send_email(sender,instance,created,**kwargs):
         for address in instance.recipients.split(','):
             send_mail(instance.subject,instance.message,instance.from_email or None,[address],instance.priority)
         if not getattr(settings,'MAILER_DAEMON_RUNNING',False):
-            print 'send all emails'
             # if there is not a mailer cron job runnig,invoke the send_all() function to send mails.
             from mailer.engine import send_all
             send_all()
@@ -54,7 +53,6 @@ def do_send_email(sender,instance,created,**kwargs):
         data = []
         for address in instance.recipients.split(','):
             data.append((instance.subject,instance.message,instance.from_email or None,[address]))
-            print data
         send_mass_mail(data,True)
 
 post_save.connect(do_send_email,sender=MailMessage,dispatch_uid='send_email_listener')
