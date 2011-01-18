@@ -27,7 +27,14 @@ class MailMessage(models.Model):
     from_email = models.EmailField(_('from_email'),blank=True,null=True)
     priority = models.CharField(max_length=10, choices=PRIORITIES, default="medium")
     create_at = models.DateTimeField(_('create_at'),auto_now_add=True)
-    user = models.ForeignKey(User,verbose_name=_('user'))
+    user = models.ForeignKey(User,verbose_name=_('user'),null=True)
+
+    class Meta:
+        verbose_name = _('Mail Message')
+        verbose_name_plural = _('Mail Messages')
+
+    def __unicode__(self):
+        return self.subject
 
 def do_send_email(sender,instance,created,**kwargs):
     if not created:
